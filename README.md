@@ -18,3 +18,16 @@ Use data mapper and postgres to save the data.
 You don't have to be logged in to see the peeps.
 You only can peep if you are logged in.
 Please ensure that you put all your work in at Github Repository called "Chitter"
+
+
+BOOKMARK MANAGERS FUNCTIONALITY::
+
+The website will have the following options:
+
+Show a list of links from the database
+Add new links
+Add tags to the links
+Filter links by a tag
+
+
+CTRL + D TO EXIT PSQL
