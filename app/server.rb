@@ -13,3 +13,9 @@ DataMapper.finalize
 
 # However, the database tables don't exist yet. Let's tell datamapper to create them
 DataMapper.auto_upgrade!
+
+
+get '/' do
+  @tweets = Tweet.all
+  erb :index
+end
