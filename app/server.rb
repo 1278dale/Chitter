@@ -15,7 +15,29 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 
+
+
+
+
+
+
+
+
 get '/' do
   @tweets = Tweet.all
   erb :index
 end
+
+post '/tweets' do
+  content = params["content"]
+  Tweet.create(:content => content)
+  redirect to('/')
+end
+
+
+# post '/links' do
+#   url = params["url"]
+#   title = params["title"]
+#   Link.create(:url => url, :title => title)
+#   redirect to('/')
+# end
