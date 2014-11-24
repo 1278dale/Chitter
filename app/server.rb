@@ -1,12 +1,14 @@
 require 'data_mapper'
 require 'sinatra'
 require './app/models/tweet' # this needs to be done after datamapper is initialised
-require './app/models/user'
 require_relative 'helpers/application'
 require 'rack-flash'
 
 enable :sessions
 set :session_secret, 'super secret'
+
+
+use Rack::Flash
 
 set :views, Proc.new{File.join(root, 'views')}
 
@@ -15,6 +17,7 @@ env = ENV['RACK_ENV'] || 'development'
 # we're telling datamapper to use a postgres database on localhost. The name will be "bookmark_manager_test" or "bookmark_manager_development" depending on the environment
 DataMapper.setup(:default,"postgres://localhost/chitter_#{env}")
 
+require './app/models/user'
 
 # After declaring your models, you should finalise them
 DataMapper.finalize
@@ -45,10 +48,10 @@ post '/users' do
               :password => params[:password],
               :password_confirmation => params[:password_confirmation])
   if @user.save
-  session[:user_id] = @user.id
-  redirect to('/')
+    session[:user_id] = @user.id
+    redirect to('/')
   else
-    flash[:notice] = "Sorry, your passwords don't match"
-    erb :"users/new"
+    flash[:errors] = @user.errors.full_messages
+    redirect to('/users/new')
   end
 end

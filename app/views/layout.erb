@@ -1,7 +1,14 @@
 <body>
   <% if current_user %>
     Welcome, <%= current_user.email %>. Your username is <%= current_user.username %>
-      <div id="notice"><%= flash[:notice] %></div>
-    <% end %>
+  <% end %>
+  <% if flash[:errors] && !flash[:errors].empty? %>
+    Sorry, there were the following problems with the form.
+    <ul id="errors">
+      <% flash[:errors].each do |error| %>
+        <li><%= error %></li>
+     <% end %>
+    </ul>
+<% end %>
     <%= yield %>
   </body>
