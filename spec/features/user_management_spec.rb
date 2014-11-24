@@ -30,7 +30,7 @@ require './app/models/user'
 
 feature "User signs up" do
 
-  scenario "when a new user visits the side" do
+  scenario "when a new user visits the site" do
     expect{ sign_up }.to change(User, :count).by(1)
     expect(page).to have_content("Welcome, test@test.com. Your username is dale")
     expect(User.first.email).to eq("test@test.com")

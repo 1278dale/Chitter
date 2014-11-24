@@ -1,28 +1,25 @@
 require 'data_mapper'
 require 'sinatra'
+require './app/models/tweet' # this needs to be done after datamapper is initialised
+require './app/models/user'
+require_relative 'helpers/application'
+
+enable :sessions
+set :session_secret, 'super secret'
+
+set :views, Proc.new{File.join(root, 'views')}
 
 env = ENV['RACK_ENV'] || 'development'
 
 # we're telling datamapper to use a postgres database on localhost. The name will be "bookmark_manager_test" or "bookmark_manager_development" depending on the environment
 DataMapper.setup(:default,"postgres://localhost/chitter_#{env}")
 
-require './app/models/tweet' # this needs to be done after datamapper is initialised
-require './app/models/user'
 
 # After declaring your models, you should finalise them
 DataMapper.finalize
 
 # However, the database tables don't exist yet. Let's tell datamapper to create them
 DataMapper.auto_upgrade!
-
-
-
-
-
-
-
-
-
 
 get '/' do
   @tweets = Tweet.all
@@ -35,10 +32,15 @@ post '/tweets' do
   redirect to('/')
 end
 
+get '/users/new' do
+  @user = User.new
+  erb :"users/new"
+end
 
-# post '/links' do
-#   url = params["url"]
-#   title = params["title"]
-#   Link.create(:url => url, :title => title)
-#   redirect to('/')
-# end
+post '/users' do
+  user = User.create(:email => params[:email],
+              :username => params[:username],
+              :password => params[:password])
+  session[:user_id] = user.id
+  redirect to('/')
+end
