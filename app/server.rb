@@ -7,6 +7,7 @@ env = ENV['RACK_ENV'] || 'development'
 DataMapper.setup(:default,"postgres://localhost/chitter_#{env}")
 
 require './app/models/tweet' # this needs to be done after datamapper is initialised
+require './app/models/user'
 
 # After declaring your models, you should finalise them
 DataMapper.finalize
