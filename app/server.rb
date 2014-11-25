@@ -51,7 +51,23 @@ post '/users' do
     session[:user_id] = @user.id
     redirect to('/')
   else
-    flash[:errors] = @user.errors.full_messages
+    flash.now[:errors] = @user.errors.full_messages
     redirect to('/users/new')
+  end
+
+  get '/sessions/new' do
+    erb :"sessions/new"
+  end
+
+  post '/sessions' do
+    email, username, password = params[:email], params[:username], params[:password]
+    user = User.authenticate(email, username, password)
+    if user
+      session[:user_id] = user.id
+      redirect to('/')
+    else
+      flash[:errors] = ["The email or password is incorrect"]
+      erb :"sessions/new"
+    end
   end
 end
